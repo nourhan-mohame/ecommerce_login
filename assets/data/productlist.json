@@ -1,0 +1,82 @@
+[
+  {
+    "id": 0,
+    "name": "NexMart - Casual Sneakers",
+    "category": "NOP",
+    "imageUrl": "assets/image/1.jpg",
+    "oldPrice": "1899",
+    "price": "799"
+  },
+  {
+    "id": 1,
+    "name": "Asian - Men Bouncer",
+    "category": "Men",
+    "oldPrice": "999",
+    "imageUrl": "assets/image/2.jpg",
+    "price": "719"
+  },
+  {
+    "id": 2,
+    "name": "Sparx",
+    "category": "Men",
+    "imageUrl": "assets/image/3.jpg",
+    "oldPrice": "1349",
+    "price": "944"
+  },
+  {
+    "id": 3,
+    "name": "Ethics",
+    "category": "Men",
+    "imageUrl": "assets/image/4.jpg",
+    "oldPrice": "999",
+    "price": "469"
+  },
+  {
+    "id": 4,
+    "name": "Sparx",
+    "category": "men",
+    "imageUrl": "assets/image/5.jpg",
+    "oldPrice": "849",
+    "price": "760"
+  },
+  {
+    "id": 5,
+    "name": "Asian",
+    "category": "Men",
+    "imageUrl": "assets/image/6.jpg",
+    "oldPrice": "599",
+    "price": "449"
+  },
+  {
+    "id": 6,
+    "name": "Reebok",
+    "category": "Men",
+    "imageUrl": "assets/image/7.jpg",
+    "oldPrice": "2799",
+    "price": "1196"
+  },
+  {
+    "id": 7,
+    "name": "Sparx",
+    "category": "Men",
+    "imageUrl": "assets/image/8.jpg",
+    "oldPrice": "1049",
+    "price": "890"
+  },
+  {
+    "id": 8,
+    "name": "Reebok",
+    "category": "Men",
+    "imageUrl": "assets/image/9.jpg",
+    "oldPrice": "3699",
+    "price": "999"
+  },
+  {
+    "id": 9,
+    "name": "Asian",
+    "category": "Men",
+    "imageUrl": "assets/image/10.jpg",
+    "oldPrice": "1499",
+    "price": "719"
+  }
+]

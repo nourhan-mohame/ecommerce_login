@@ -1,3 +1,4 @@
+import 'package:ecommerce_login/screens/home.dart';
 import 'package:flutter/material.dart';
 
 
@@ -83,6 +84,8 @@ class _LoginPageState extends State<LoginPage> {
 
                   // Add your login logic here
                   // You can use the username and password variables
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => Home()),);
+
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFFFF6969),
@@ -111,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Text('create a new account.',
               style:TextStyle(
-                fontSize:12,
+                fontSize:13,
                 color:Color(0xFFFF6969),
                 fontWeight:FontWeight.w200,
 
