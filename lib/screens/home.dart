@@ -1,11 +1,12 @@
 import 'dart:convert';
 
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dots_indicator/dots_indicator.dart';
+import 'package:ecommerce_login/screens/product_details.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' as rootBundle;
 
 import '../prodect-data/product_data_class.dart';
+import 'product_card.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -18,31 +19,11 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
   int _currentSlide = 0;
 
-  final List<Widget> _pages = [
-    Placeholder(color: Colors.red),
-    Placeholder(color: Colors.green),
-    Placeholder(color: Colors.blue),
-    Placeholder(color: Colors.yellow),
-  ];
-
-  late List<product> _product = [];
-
-  Future<void> _loadproduct() async {
-    final String data =
-    await DefaultAssetBundle.of(context).loadString('assets/data/productlist.json');
-
-    if (data != null) {
-      final List<dynamic> jsonList = json.decode(data);
-      setState(() {
-        _product = jsonList.map((json) => product.fromJson(json)).toList();
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _loadproduct();
+  Future<List<product>> readJsonData() async {
+    final jsondata =
+    await rootBundle.rootBundle.loadString('assets/data/productlist.json');
+    final list = json.decode(jsondata) as List<dynamic>;
+    return list.map((e) => product.fromJson(e)).toList();
   }
 
   @override
@@ -51,69 +32,126 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: const Text('app'),
       ),
-      body: Stack(
+      body: Column(
         children: [
-          IndexedStack(
-            index: _selectedIndex,
-          ),
-          Positioned(
-            top: 20,
-            left: 0,
-            right: 0,
-            child: Column(
-              children: [
-                CarouselSlider(
-                  items: _product.map((product) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(product.imageUrl!),
-                          fit: BoxFit.cover,
+          // Carousel Slider
+          FutureBuilder(
+            future: readJsonData(),
+            builder: (context, data) {
+              if (data.hasError) {
+                return Center(
+                  child: Text("${data.error}"),
+                );
+              } else if (data.hasData) {
+                var items = data.data as List<product>;
+                return CarouselSlider.builder(
+                  itemCount: items == null ? 0 : items.length,
+                  itemBuilder: (BuildContext context, int index, int realIndex) {
+                    return Card(
+                      elevation: 5,
+                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              child: Image(
+                                image: NetworkImage(items[index].imageUrl.toString()),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.only(bottom: 8),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 8, right: 8),
+                                      child: Text(
+                                        items[index].name.toString(),
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 8, right: 8),
+                                      child: Text(items[index].price.toString()),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-
-                      child:Column(
-                        children: [
-                          Text(product.name ?? ''),
-                          Text(product.category ?? ''),
-                          Text(product.price ?? ''),
-                        ],
-                      ),
                     );
-
-                  }).toList(),
+                  },
                   options: CarouselOptions(
-                    height: 300,
+                    initialPage: 0,
+                    aspectRatio: 2.0,
                     enlargeCenterPage: true,
-                    autoPlay: true,
-                    aspectRatio: 16 / 9,
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                    viewportFraction: 0.8,
                     onPageChanged: (index, reason) {
                       setState(() {
                         _currentSlide = index;
                       });
                     },
-                    enableInfiniteScroll: true,
-                    enlargeStrategy: CenterPageEnlargeStrategy.scale,
                   ),
-                ),
-                SizedBox(height: 30),
-                DotsIndicator(
-                  dotsCount: _product.length > 0 ? _product.length : 1,
-                  position: _currentSlide.toInt(),
-                  decorator: DotsDecorator(
-                    size: const Size.square(9.0),
-                    activeSize: const Size(18.0, 9.0),
-                    activeShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+          // Grid of Three Cards
+          Container(
+            padding: EdgeInsets.all(8),
+            child: GridView.builder(
+              shrinkWrap: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
+              ),
+              itemCount: 3, // Number of cards in the grid
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () {
+                    // Navigate to the next page when a card is tapped
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductDetails(),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    elevation: 5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ProductCard(
+                          imageAsset: 'assets/image/${index + 1}.jpg',
+                          productName: 'Product ${index + 1}',
+                          productPrice: 'Price: \$${(index + 1) * 10}.00',
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ],
+                );
+              },
             ),
           ),
+
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

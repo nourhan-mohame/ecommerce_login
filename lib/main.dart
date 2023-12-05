@@ -1,4 +1,5 @@
 import 'package:ecommerce_login/screens/forget-password.dart';
+import 'package:ecommerce_login/screens/product_details.dart';
 import 'package:ecommerce_login/screens/sign-up.dart';
 import 'package:flutter/material.dart';
 

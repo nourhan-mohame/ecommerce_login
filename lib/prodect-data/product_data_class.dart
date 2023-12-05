@@ -1,5 +1,5 @@
 class product{
-  String? id;
+  int? id;
   String? name;
   String? category;
   String? imageUrl;
@@ -9,7 +9,7 @@ class product{
   product();
 
   product.fromJson(Map<String,dynamic>data){
-    id=data['id'] as String?;
+    id=data['id'] as int?;
     category=data['category']as String?;
     name=data['name']as String?;
     imageUrl=data['imageUrl']as String?;
