@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ecommerce_login/prodect-data/product_details_model_provider.dart';
 import 'package:ecommerce_login/screens/product_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as rootBundle;
+import 'package:provider/provider.dart';
 
 import '../prodect-data/product_data_class.dart';
 import 'product_card.dart';
@@ -126,11 +128,14 @@ class _HomeState extends State<Home> {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
+
                     // Navigate to the next page when a card is tapped
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProductDetails(),
+                        builder: (context) => ChangeNotifierProvider(create:
+                        (context)=>product_details_model_provider(),
+                        child:ProductDetails(),)
                       ),
                     );
                   },
