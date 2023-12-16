@@ -13,15 +13,15 @@ class _ProductDetailsState extends State<ProductDetails> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text('Product Details'),
+        title: const Text('Product Details'),
         actions: [
           IconButton(
-            icon: Icon(Icons.shopping_cart),
+            icon: const Icon(Icons.shopping_cart),
             onPressed: () {
               // Handle cart icon pressed
             },
@@ -29,7 +29,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         ],
       ),
       body: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -37,7 +37,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               'assets/image/4.jpg',
               fit: BoxFit.contain,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -45,29 +45,29 @@ class _ProductDetailsState extends State<ProductDetails> {
                   onTap: () {
                     // Handle "Product Details" tap
                   },
-                  child: Text('Product '),
+                  child: const Text('Product '),
 
                 ),
                 InkWell(
                   onTap: () {
                     // Handle "Review" tap
                   },
-                  child: Text('Details'),
+                  child: const Text('Details'),
                 ),
                 InkWell(
                   onTap: () {
                     // Handle "Select Color" tap
                   },
-                  child: Text('Review'),
+                  child: const Text('Review'),
                 ),
                 
               ],
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text('Select Color'),
+                const Text('Select Color'),
                 for (int i = 0; i < 5; i++)
                   Container(
                     width: 30,
@@ -79,11 +79,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                   ),
               ],
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text('Select Size'),
+                const Text('Select Size'),
                 for (int size = 1; size <= 5; size++)
                   Container(
                     width: 40,
@@ -95,13 +95,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                     child: Center(
                       child: Text(
                         'Size $size',
-                        style: TextStyle(fontSize: 12),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ),
                   ),
               ],
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -110,25 +110,25 @@ class _ProductDetailsState extends State<ProductDetails> {
                     // Handle "Share" button pressed
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0xFFFFFF),
+                    backgroundColor: const Color(0x00ffffff),
                     shape: BeveledRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
-                  child: Text('Share This'),
+                  child: const Text('Share This'),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     // Handle "Add to Cart" button pressed
                   },
                   style: ElevatedButton.styleFrom(
-                    primary:Color(0xFFFF6969),
+                    backgroundColor: const Color(0xFFFF6969),
                     shape: BeveledRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
 
                     ),
                   ),
-                  child: Text('Add to Cart'),
+                  child: const Text('Add to Cart'),
 
                 ),
               ],

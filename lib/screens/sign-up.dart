@@ -1,5 +1,8 @@
-import 'package:ecommerce_login/screens/login.dart';
+import 'package:ecommerce_login/firebase_auth/auth_services.dart';
+import 'package:ecommerce_login/screens/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -13,12 +16,23 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  final firebaseauthservices _auth =firebaseauthservices();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Container(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
@@ -27,7 +41,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 color: Colors.grey.withOpacity(0.1),
                 spreadRadius: 3,
                 blurRadius: 10,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
@@ -36,7 +50,7 @@ class _SignUpPageState extends State<SignUpPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'Sign Up',
                 style: TextStyle(
                   fontSize: 30.0,
@@ -44,69 +58,61 @@ class _SignUpPageState extends State<SignUpPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(
                   hintText: 'Email',
-                  prefixIcon: Icon(Icons.email),
+                  prefixIcon: const Icon(Icons.email),
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFF727C8E)),
+                    borderSide: const BorderSide(color: Color(0xFF727C8E)),
                     borderRadius: BorderRadius.circular(5.0),
                   ),
-                  contentPadding: EdgeInsets.all(8.0),
+                  contentPadding: const EdgeInsets.all(8.0),
                 ),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               TextFormField(
                 controller: usernameController,
                 decoration: InputDecoration(
                   hintText: 'Username',
-                  prefixIcon: Icon(Icons.person),
+                  prefixIcon: const Icon(Icons.person),
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFF727C8E)),
+                    borderSide: const BorderSide(color: Color(0xFF727C8E)),
                     borderRadius: BorderRadius.circular(5.0),
                   ),
-                  contentPadding: EdgeInsets.all(8.0),
+                  contentPadding: const EdgeInsets.all(8.0),
                 ),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               TextFormField(
                 controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: 'Password',
-                  prefixIcon: Icon(Icons.lock),
+                  prefixIcon: const Icon(Icons.lock),
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFF727C8E)),
+                    borderSide: const BorderSide(color: Color(0xFF727C8E)),
                     borderRadius: BorderRadius.circular(5.0),
                   ),
-                  contentPadding: EdgeInsets.all(8.0),
+                  contentPadding: const EdgeInsets.all(8.0),
                 ),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               ElevatedButton(
                 onPressed: () {
-                  // Implement your signup logic here using the entered values
-                  String email = emailController.text;
-                  String username = usernameController.text;
-                  String password = passwordController.text;
-                  Navigator.push(context,MaterialPageRoute(builder: (context) => LoginPage()),);
-
-                  // Add your signup logic here
-                  // You can use the email, username, and password variables
+                 _signup();
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFFF6969),
-                  onPrimary: Colors.white,
+                  foregroundColor: Colors.white, backgroundColor: const Color(0xFFFF6969),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                 ),
-                child: Text('Sign Up'),
+                child: const Text('Sign Up'),
               ),
-              SizedBox(height: 10.0),
-              Text(
+              const SizedBox(height: 10.0),
+              const Text(
                 'By creating an account, you agree to our\n'
                    ,
                 style: TextStyle(
@@ -115,7 +121,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              Text( 'Terms of Service and Privacy Policy',
+              const Text( 'Terms of Service and Privacy Policy',
               style:TextStyle(
                 fontSize:12,
                 color: Color(0xFFFF6969),
@@ -128,5 +134,23 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+  void _signup() async{
+    String username= usernameController.text;
+    String email=emailController.text;
+    String password=passwordController.text;
+
+    User? user =await _auth.signupemailandpassword(email, password);
+
+    if(user!=null){
+      print("User is succes");
+      Navigator.push(context,MaterialPageRoute(builder: (context) => const Home()),);
+
+
+    }
+    else{
+      print("Some error happen! please try again");
+    }
+
   }
 }

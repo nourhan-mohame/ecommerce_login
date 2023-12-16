@@ -5,7 +5,7 @@ class ProductCard extends StatelessWidget {
   final String productName;
   final String productPrice;
 
-  ProductCard({
+  const ProductCard({super.key, 
     required this.imageAsset,
     required this.productName,
     required this.productPrice,
@@ -18,7 +18,7 @@ class ProductCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: 80,
             height: 80,
             child: Image.asset(
@@ -27,10 +27,10 @@ class ProductCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Text(
               productName,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
               ),

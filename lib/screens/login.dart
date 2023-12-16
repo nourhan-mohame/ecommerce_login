@@ -1,8 +1,12 @@
+import 'package:ecommerce_login/firebase_auth/auth_services.dart';
 import 'package:ecommerce_login/screens/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -10,13 +14,22 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final firebaseauthservices _auth =firebaseauthservices();
+
+  @override
+  void dispose() {
+
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Container(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
@@ -25,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
                 color: Colors.grey.withOpacity(0.1),
                 spreadRadius: 3,
                 blurRadius: 10,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
@@ -34,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'Log In',
                 style: TextStyle(
                   fontSize: 30.0,
@@ -42,59 +55,53 @@ class _LoginPageState extends State<LoginPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               TextFormField(
                 controller: usernameController,
                 decoration: InputDecoration(
                   hintText: 'Email',
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.email,
                     color: Color(0xFF727C8E),
                   ),
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFF727C8E)),
+                    borderSide: const BorderSide(color: Color(0xFF727C8E)),
                     borderRadius: BorderRadius.circular(5.0),
                   ),
-                  contentPadding: EdgeInsets.all(8.0),
+                  contentPadding: const EdgeInsets.all(8.0),
                 ),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               TextFormField(
                 controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: 'Password',
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.lock,
                     color: Color(0xFF727C8E),
                   ),
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFF727C8E)),
+                    borderSide: const BorderSide(color: Color(0xFF727C8E)),
                     borderRadius: BorderRadius.circular(5.0),
                   ),
-                  contentPadding: EdgeInsets.all(8.0),
+                  contentPadding: const EdgeInsets.all(8.0),
                 ),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               ElevatedButton(
                 onPressed: () {
-                  // Implement your login logic here using the entered values
-                  String username = usernameController.text;
-                  String password = passwordController.text;
-
-                  // Add your login logic here
-                  // You can use the username and password variables
-                  Navigator.push(context,MaterialPageRoute(builder: (context) => Home()),);
+                 signin();
+                 Navigator.push(context,MaterialPageRoute(builder: (context) => const Home()),);
 
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFFF6969),
-                  onPrimary: Colors.white,
+                  foregroundColor: Colors.white, backgroundColor: const Color(0xFFFF6969),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'Log In',
                   style: TextStyle(
                     fontSize: 12.0,
@@ -102,8 +109,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 10.0),
-              Text(
+              const SizedBox(height: 10.0),
+              const Text(
                 'Don’t have an account? Swipe right to ',
                 style: TextStyle(
                   fontSize: 12.0,
@@ -112,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              Text('create a new account.',
+              const Text('create a new account.',
               style:TextStyle(
                 fontSize:13,
                 color:Color(0xFFFF6969),
@@ -125,5 +132,23 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+  void signin() async{
+    String username= usernameController.text;
+    String email=usernameController.text;
+    String password=passwordController.text;
+
+    User? user =await _auth.signinemailandpassword(email, password);
+
+    if(user!=null){
+      print("User is succes login");
+      Navigator.push(context,MaterialPageRoute(builder: (context) => const Home()),);
+
+
+    }
+    else{
+      print("Some error happen! please try again");
+    }
+
   }
 }

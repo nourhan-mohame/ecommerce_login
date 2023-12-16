@@ -51,14 +51,14 @@ class _HomeState extends State<Home> {
                   itemBuilder: (BuildContext context, int index, int realIndex) {
                     return Card(
                       elevation: 5,
-                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: Container(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Container(
+                            SizedBox(
                               width: 50,
                               height: 50,
                               child: Image(
@@ -68,23 +68,23 @@ class _HomeState extends State<Home> {
                             ),
                             Expanded(
                               child: Container(
-                                padding: EdgeInsets.only(bottom: 8),
+                                padding: const EdgeInsets.only(bottom: 8),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding: EdgeInsets.only(left: 8, right: 8),
+                                      padding: const EdgeInsets.only(left: 8, right: 8),
                                       child: Text(
                                         items[index].name.toString(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.only(left: 8, right: 8),
+                                      padding: const EdgeInsets.only(left: 8, right: 8),
                                       child: Text(items[index].price.toString()),
                                     ),
                                   ],
@@ -108,7 +108,7 @@ class _HomeState extends State<Home> {
                   ),
                 );
               } else {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
@@ -116,10 +116,10 @@ class _HomeState extends State<Home> {
           ),
           // Grid of Three Cards
           Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             child: GridView.builder(
               shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 8.0,
@@ -135,7 +135,7 @@ class _HomeState extends State<Home> {
                       MaterialPageRoute(
                         builder: (context) => ChangeNotifierProvider(create:
                         (context)=>product_details_model_provider(),
-                        child:ProductDetails(),)
+                        child:const ProductDetails(),)
                       ),
                     );
                   },
