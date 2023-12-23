@@ -1,8 +1,8 @@
 import 'package:ecommerce_login/firebase_auth/auth_services.dart';
 import 'package:ecommerce_login/screens/home.dart';
+import 'package:ecommerce_login/task12&13/models/ads-ui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -144,7 +144,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     if(user!=null){
       print("User is succes");
-      Navigator.push(context,MaterialPageRoute(builder: (context) => const Home()),);
+      Navigator.push(context,MaterialPageRoute(builder: (context) =>  adshome()),);
 
 
     }
