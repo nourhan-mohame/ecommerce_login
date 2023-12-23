@@ -1,10 +1,16 @@
-import 'package:ecommerce_login/task12&13/fetch-data.dart';
-import 'package:ecommerce_login/task12&13/models/ads-models.dart';
+import 'package:ecommerce_login/task11/fetch-data.dart';
+import 'package:ecommerce_login/task11/models/ads-models.dart';
+
 import 'package:flutter/material.dart';
 
-class adshome extends StatelessWidget {
-   adshome({Key? key}) : super(key: key);
+class adshome extends StatefulWidget {
+   const adshome({Key? key}) : super(key: key);
 
+  @override
+  State<adshome> createState() => _adshomeState();
+}
+
+class _adshomeState extends State<adshome> {
   final FirestoreService fetchData = FirestoreService();
 
   @override

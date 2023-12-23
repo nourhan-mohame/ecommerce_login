@@ -1,4 +1,4 @@
-import 'package:ecommerce_login/task12&13/models/ads-models.dart';
+import 'package:ecommerce_login/task11/models/ads-models.dart';
 import 'package:flutter/cupertino.dart';
 
 class adprovider extends ChangeNotifier{

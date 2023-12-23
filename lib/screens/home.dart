@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_login/prodect-data/product_data_class.dart';
 import 'package:ecommerce_login/prodect-data/product_details_model_provider.dart';
+import 'package:ecommerce_login/screens/product_card.dart';
 import 'package:ecommerce_login/screens/product_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as rootBundle;
 import 'package:provider/provider.dart';
-
-import '../prodect-data/product_data_class.dart';
-import 'product_card.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -27,6 +27,45 @@ class _HomeState extends State<Home> {
     final list = json.decode(jsondata) as List<dynamic>;
     return list.map((e) => product.fromJson(e)).toList();
   }
+
+ /* Future<List<ProductCard>> fetchGridData() async {
+    return [
+      ProductCard(
+        imageAsset: 'assets/image/1.jpg',
+        productName: 'Product 1',
+        productPrice: 'Price: \$10.00',
+      ),
+      ProductCard(
+        imageAsset: 'assets/image/2.jpg',
+        productName: 'Product 2',
+        productPrice: 'Price: \$20.00',
+      ),
+      ProductCard(
+        imageAsset: 'assets/image/3.jpg',
+        productName: 'Product 3',
+        productPrice: 'Price: \$30.00',
+      ),
+    ];
+  }
+*/
+
+  Future<List<ProductCard>> fetchFirestoreData() async {
+    // Assuming you have a 'products' collection in Cloud Firestore
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+    await FirebaseFirestore.instance.collection('product').get();
+
+    return querySnapshot.docs.map((DocumentSnapshot doc) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      return ProductCard(
+        imageAsset: data['imageAsset'],
+        productName: data['productName'],
+        productPrice: data['productPrice'],
+      );
+    }).toList();
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -115,48 +154,63 @@ class _HomeState extends State<Home> {
             },
           ),
           // Grid of Three Cards
-          Container(
-            padding: const EdgeInsets.all(8),
-            child: GridView.builder(
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-              ),
-              itemCount: 3, // Number of cards in the grid
-              itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () {
-
-                    // Navigate to the next page when a card is tapped
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChangeNotifierProvider(create:
-                        (context)=>product_details_model_provider(),
-                        child:const ProductDetails(),)
-                      ),
-                    );
-                  },
-                  child: Card(
-                    elevation: 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ProductCard(
-                          imageAsset: 'assets/image/${index + 1}.jpg',
-                          productName: 'Product ${index + 1}',
-                          productPrice: 'Price: \$${(index + 1) * 10}.00',
-                        ),
-                      ],
+          FutureBuilder(
+            future: fetchFirestoreData(),
+            builder: (context, data) {
+              if (data.hasError) {
+                return Center(
+                  child: Text("${data.error}"),
+                );
+              } else if (data.hasData) {
+                var gridItems = data.data as List<ProductCard>;
+                return Container(
+                  padding: const EdgeInsets.all(8),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 8.0,
+                      mainAxisSpacing: 8.0,
                     ),
+                    itemCount: gridItems.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          // Navigate to the next page when a card is tapped
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChangeNotifierProvider(
+                                create: (context) => product_details_model_provider(),
+                                child: const ProductDetails(),
+                              ),
+                            ),
+                          );
+                        },
+                        child: Card(
+                          elevation: 5,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ProductCard(
+                                imageAsset: gridItems[index].imageAsset,
+                                productName: gridItems[index].productName,
+                                productPrice: gridItems[index].productPrice,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 );
-              },
-            ),
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
           ),
-
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -190,3 +244,5 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+
