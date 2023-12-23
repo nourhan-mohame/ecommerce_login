@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetails extends StatefulWidget {
@@ -8,6 +9,8 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  bool showDetails = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,24 +46,26 @@ class _ProductDetailsState extends State<ProductDetails> {
               children: [
                 InkWell(
                   onTap: () {
-                    // Handle "Product Details" tap
+                    setState(() {
+                      showDetails = false;
+                    });
                   },
-                  child: const Text('Product '),
-
+                  child: const Text('Product'),
                 ),
                 InkWell(
                   onTap: () {
-                    // Handle "Review" tap
+                    setState(() {
+                      showDetails = true;
+                    });
                   },
                   child: const Text('Details'),
                 ),
                 InkWell(
                   onTap: () {
-                    // Handle "Select Color" tap
+                    // Handle "Review" tap
                   },
                   child: const Text('Review'),
                 ),
-                
               ],
             ),
             const SizedBox(height: 16.0),
@@ -102,6 +107,11 @@ class _ProductDetailsState extends State<ProductDetails> {
               ],
             ),
             const SizedBox(height: 16.0),
+            if (showDetails)
+              DetailsWidget() // Show details widget when showDetails is true
+            else
+              Container(), // Empty container when showDetails is false
+            const SizedBox(height: 16.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -125,11 +135,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                     backgroundColor: const Color(0xFFFF6969),
                     shape: BeveledRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
-
                     ),
                   ),
                   child: const Text('Add to Cart'),
-
                 ),
               ],
             ),
@@ -139,3 +147,66 @@ class _ProductDetailsState extends State<ProductDetails> {
     );
   }
 }
+
+
+class DetailsWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<DocumentSnapshot>(
+      future: fetchDataFromCloud(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (!snapshot.hasData || snapshot.data == null) {
+          return Text('No data available');
+        } else {
+          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('BRAND'),
+                        Text(data['BRAND Name'] ?? 'N/A'),
+                        Text('CONDITION'),
+                        Text(data['CONDITION Detail'] ?? 'N/A'),
+                        Text('CATEGORY'),
+                        Text(data['CATEGORY Name'] ?? 'N/A'),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('SKU'),
+                        Text(data['SKU Detail'] ?? 'N/A'),
+                        Text('MATERIAL'),
+                        Text(data['MATERIAL Detail'] ?? 'N/A'),
+                        Text('FITTING'),
+                        Text(data['FITTING Detail'] ?? 'N/A'),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10.0),
+              ],
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Future<DocumentSnapshot> fetchDataFromCloud() async {
+    return await FirebaseFirestore.instance.collection('product-details').doc('5VIZaPluXbOyBcEF3BNd').get();
+  }
+}
+
+

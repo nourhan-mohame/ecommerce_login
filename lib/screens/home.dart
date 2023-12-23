@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
     return list.map((e) => product.fromJson(e)).toList();
   }
 
- /* Future<List<ProductCard>> fetchGridData() async {
+ Future<List<ProductCard>> fetchGridData() async {
     return [
       ProductCard(
         imageAsset: 'assets/image/1.jpg',
@@ -47,8 +47,9 @@ class _HomeState extends State<Home> {
       ),
     ];
   }
-*/
 
+
+/*
   Future<List<ProductCard>> fetchFirestoreData() async {
     // Assuming you have a 'products' collection in Cloud Firestore
     QuerySnapshot<Map<String, dynamic>> querySnapshot =
@@ -63,6 +64,7 @@ class _HomeState extends State<Home> {
       );
     }).toList();
   }
+*/
 
 
 
@@ -155,7 +157,7 @@ class _HomeState extends State<Home> {
           ),
           // Grid of Three Cards
           FutureBuilder(
-            future: fetchFirestoreData(),
+            future: fetchGridData(),
             builder: (context, data) {
               if (data.hasError) {
                 return Center(
